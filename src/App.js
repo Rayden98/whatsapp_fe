@@ -13,7 +13,6 @@ import { useSelector } from "react-redux";
 
 function App() {
   const { user } = useSelector((state) => state.user);
-  // Safely access 'token' property with optional chaining (?.)
   const token = user;
 
   return (
