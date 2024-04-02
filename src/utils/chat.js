@@ -5,3 +5,11 @@ export const getConversationId = (user, users) => {
   // }
   return users[0]._id === user._id ? users[0]._id : users[1]._id;
 };
+
+export const getConversationName = (user, users) => {
+  return users[0]._id === user._id ? users[0].name : users[1].name;
+};
+
+export const getConversationPicture = (user, users) => {
+  return users[0]._id === user._id ? users[0].picture : users[1].picture;
+};
