@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,17 +10,22 @@ import { io } from "socket.io-client";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import SocketContext from "./context/SocketContext";
+import { SocketProvider } from "./context/socketContext";
 //Socket io
 const socket = io(process.env.REACT_APP_API_ENDPOINT.split("/api/v1")[0]);
 
 function App() {
+  // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const { files } = useSelector((state) => state.chat);
+  console.log("files", files);
   const token = user;
 
   return (
     <div className="dark">
-      <SocketContext.Provider value={socket}>
+      <SocketProvider
+        serverUrl={process.env.REACT_APP_API_ENDPOINT.split("/api/v1")[0]}
+      >
         <Router>
           <Routes>
             <Route
@@ -42,7 +47,7 @@ function App() {
             />
           </Routes>
         </Router>
-      </SocketContext.Provider>
+      </SocketProvider>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { open_create_conversation } from "../../../features/chatSlice";
-import SocketContext from "../../../context/SocketContext";
+import { openCreateConversation } from "../../../features/chatSlice";
+import { useSocket } from "../../../context/socketContext";
 
-function Contact({ contact, setSearchResults, socket }) {
+const Contact = ({ contact, setSearchResults }) => {
   const dispatch = useDispatch();
+  const socket = useSocket();
   const { user } = useSelector((state) => state.user);
   const { token } = user;
 
@@ -12,7 +13,7 @@ function Contact({ contact, setSearchResults, socket }) {
     token,
   };
   const openConversation = async () => {
-    let newConvo = await dispatch(open_create_conversation(values));
+    let newConvo = await dispatch(openCreateConversation(values));
     socket.emit("join conversation", newConvo.payload._id);
   };
   return (
@@ -53,12 +54,13 @@ function Contact({ contact, setSearchResults, socket }) {
       <div className="ml-16 border-b dark:border-b-dark_border_1"></div>
     </li>
   );
-}
-
-const ContactWithContext = (props) => {
-  <SocketContext.Consumer>
-    {(socket) => <Contact {...props} socket={socket} />}
-  </SocketContext.Consumer>;
 };
 
-export default ContactWithContext;
+export default Contact;
+// const ContactWithContext = (props) => {
+//   <SocketContext.Consumer>
+//     {(socket) => <Contact {...props} socket={socket} />}
+//   </SocketContext.Consumer>;
+// };
+
+// export default ContactWithContext;

@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "../../../features/chatSlice";
 import { ClipLoader } from "react-spinners";
 import { Attachments } from "./attachments";
-import SocketContext from "../../../context/SocketContext";
+import { useSocket } from "../../../context/socketContext";
 
-function ChatActions({ socket }) {
+const ChatActions = () => {
   const dispatch = useDispatch();
+  const socket = useSocket();
   const [showPicker, setShowPicker] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ function ChatActions({ socket }) {
     e.preventDefault();
     setLoading(true);
     let newMsg = await dispatch(sendMessage(values));
-    socket.emit("new message", newMsg.payload);
+    socket.emit("send message", newMsg.payload);
     setMessage("");
     setLoading(false);
   };
@@ -69,12 +70,13 @@ function ChatActions({ socket }) {
       </div>
     </form>
   );
-}
-
-const ChatActionsWithSocket = (props) => {
-  <SocketContext.Consumer>
-    {(socket) => <ChatActions {...props} socket={socket} />}
-  </SocketContext.Consumer>;
 };
 
-export default ChatActionsWithSocket;
+export default ChatActions;
+// const ChatActionsWithSocket = (props) => {
+//   <SocketContext.Consumer>
+//     {(socket) => <ChatActions {...props} socket={socket} />}
+//   </SocketContext.Consumer>;
+// };
+
+// export default ChatActionsWithSocket;

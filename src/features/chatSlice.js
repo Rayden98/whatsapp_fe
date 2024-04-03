@@ -11,6 +11,7 @@ const initialState = {
   activeConversation: {},
   messages: [],
   notifications: [],
+  files: [],
 };
 
 // functions
@@ -30,7 +31,7 @@ export const getConversations = createAsyncThunk(
   }
 );
 
-export const open_create_conversation = createAsyncThunk(
+export const openCreateConversation = createAsyncThunk(
   "conversation/open_create",
   async (values, { rejectWithValue }) => {
     const { token, receiver_id } = values;
@@ -103,6 +104,26 @@ export const chatSlice = createSlice({
     setActiveConversation: (state, action) => {
       state.activeConversation = action.payload;
     },
+    updateMessagesAndConversations: (state, action) => {
+      //update messages
+      let convo = state.activeConversation;
+      if (convo._id === action.payload.conversation._id) {
+        state.messages = [...state.messages, action.payload];
+      }
+      //update conversations
+      let conversation = {
+        ...action.payload.conversation,
+        latestMessage: action.payload,
+      };
+      let newConvos = [...state.conversations].filter(
+        (c) => c._id !== conversation._id
+      );
+      newConvos.unshift(conversation);
+      state.conversations = newConvos;
+    },
+    addFiles: (state, action) => {
+      state.files = [...state.files, action.payload];
+    },
   },
   extraReducers(builder) {
     builder
@@ -117,14 +138,14 @@ export const chatSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(open_create_conversation.pending, (state, action) => {
+      .addCase(openCreateConversation.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(open_create_conversation.fulfilled, (state, action) => {
+      .addCase(openCreateConversation.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.activeConversation = action.payload;
       })
-      .addCase(open_create_conversation.rejected, (state, action) => {
+      .addCase(openCreateConversation.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
@@ -161,6 +182,10 @@ export const chatSlice = createSlice({
       });
   },
 });
-export const { setActiveConversation } = chatSlice.actions;
+export const {
+  setActiveConversation,
+  updateMessagesAndConversations,
+  addFiles,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;

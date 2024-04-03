@@ -1,5 +1,5 @@
 import moment from "moment";
-import { TriangleIcon } from "../../../svg";
+// import { TriangleIcon } from "../../../svg";
 
 export default function Message({ message, me }) {
   return (
