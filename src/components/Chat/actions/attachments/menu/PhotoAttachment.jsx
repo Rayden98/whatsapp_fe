@@ -17,8 +17,7 @@ export default function PhotoAttachment() {
         file.type !== "image/webp" &&
         file.type !== "video/mp4" &&
         file.type !== "video/mpeg" &&
-        file.type !== "video/webm" &&
-        file.type !== "/"
+        file.type !== "video/webm"
       ) {
         files = files.filter((item) => item.name !== file.name);
         return;
@@ -32,7 +31,7 @@ export default function PhotoAttachment() {
           dispatch(
             addFiles({
               file: file,
-              imgData: e.target.result,
+              fileData: e.target.result,
               type: getFileType(file.type),
             })
           );

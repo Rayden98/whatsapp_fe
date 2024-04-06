@@ -15,6 +15,7 @@ import EmojiIcon from "./Emoji";
 import AttachmentIcon from "./Attachment";
 import SendIcon from "./Send";
 import PhotoIcon from "./Photo";
+import DownloadIcon from "./Download";
 import StickerIcon from "./Sticker";
 import CameraIcon from "./Camera";
 import DocumentIcon from "./Document";
@@ -26,6 +27,12 @@ import CallIcon from "./Call";
 import MuteIcon from "./Mute";
 import NoVideoIcon from "./NoVideo";
 import TriangleIcon from "./triangle";
+import ValidIcon from "./Valid";
+import AddContactIcon from "./AddContact";
+import SpeakerIcon from "./Speaker";
+import VideoDialIcon from "./VideoDial";
+import DialIcon from "./Dial";
+import VideoCallIcon from "./VideoCall";
 export {
   CommunityIcon,
   StoryIcon,
@@ -51,8 +58,15 @@ export {
   PollIcon,
   SmallArrowIcon,
   LockIcon,
+  DownloadIcon,
+  VideoCallIcon,
   CallIcon,
   MuteIcon,
   NoVideoIcon,
   TriangleIcon,
+  ValidIcon,
+  SpeakerIcon,
+  AddContactIcon,
+  VideoDialIcon,
+  DialIcon,
 };

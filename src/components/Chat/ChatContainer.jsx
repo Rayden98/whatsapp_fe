@@ -5,10 +5,13 @@ import { useEffect } from "react";
 import { getConversationMessages } from "../../features/chatSlice";
 import { ChatActions } from "./actions";
 import { checkOnlineStatus, getConversationId } from "../../utils/chat";
+import FilesPreview from "./preview/files/FilesPreview";
 
-export default function ChatContainer({ onlineUsers, typing }) {
+export default function ChatContainer({ onlineUsers, typing, callUser }) {
   const dispatch = useDispatch();
-  const { activeConversation, messages } = useSelector((state) => state.chat);
+  const { activeConversation, messages, files } = useSelector(
+    (state) => state.chat
+  );
   const { user } = useSelector((state) => state.user);
   const { token } = user;
   const values = {
@@ -20,8 +23,6 @@ export default function ChatContainer({ onlineUsers, typing }) {
       dispatch(getConversationMessages(values));
     }
   }, [activeConversation]);
-  console.log("messages", messages);
-  console.log(onlineUsers);
   return (
     <div className="relative w-full h-full border-l dark:border-l-dark_border_2 select-none overflow-hidden">
       {/*Container */}
@@ -33,11 +34,18 @@ export default function ChatContainer({ onlineUsers, typing }) {
             user,
             activeConversation.users
           )}
+          callUser={callUser}
         />
-        {/*Chat messages */}
-        <ChatMessages typing={typing} />
-        {/* Chat Actions */}
-        <ChatActions />
+        {files.length > 0 ? (
+          <FilesPreview />
+        ) : (
+          <>
+            {/*Chat messages */}
+            <ChatMessages typing={typing} />
+            {/* Chat Actions */}
+            <ChatActions />
+          </>
+        )}
       </div>
     </div>
   );
