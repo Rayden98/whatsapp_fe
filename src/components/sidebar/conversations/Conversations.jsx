@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
-import Conversation from "./Conversation";
-import { setActiveConversation } from "../../../features/chatSlice";
 import { checkOnlineStatus, getConversationId } from "../../../utils/chat";
+import Conversation from "./Conversation";
 
 export default function Conversations({ onlineUsers, typing }) {
   const { conversations, activeConversation } = useSelector(
@@ -13,14 +12,19 @@ export default function Conversations({ onlineUsers, typing }) {
       <ul>
         {conversations &&
           conversations
-            .filter((c) => c.latestMessage || c._id === activeConversation._id)
+            .filter(
+              (c) =>
+                c.latestMessage ||
+                c._id === activeConversation._id ||
+                c.isGroup === true
+            )
             .map((convo) => {
               let check = checkOnlineStatus(onlineUsers, user, convo.users);
               return (
                 <Conversation
                   convo={convo}
                   key={convo._id}
-                  online={check ? true : false}
+                  online={!convo.isGroup && check ? true : false}
                   typing={typing}
                 />
               );

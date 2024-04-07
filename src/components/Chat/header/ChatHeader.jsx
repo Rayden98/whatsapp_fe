@@ -6,35 +6,52 @@ import {
   VideoCallIcon,
 } from "../../../svg";
 import { capitalize } from "../../../utils/string";
+import { useSocket } from "../../../context/socketContext";
+import {
+  getConversationName,
+  getConversationPicture,
+} from "../../../utils/chat";
 
 export default function ChatHeader({ online, callUser }) {
   const { activeConversation } = useSelector((state) => state.chat);
-  const { name, picture } = activeConversation;
+  const { user } = useSelector((state) => state.user);
+  const socket = useSocket();
+
   return (
     <div className="h-[59px] dark:bg-dark_bg_2 flex items-center p16 select-none">
-      {/*Container */}
+      {/*Container*/}
       <div className="w-full flex items-center justify-between">
-        {/*Left */}
+        {/*left*/}
         <div className="flex items-center gap-x-4">
-          {/*Conversation image */}
+          {/*Conversation image*/}
           <button className="btn">
             <img
-              src={picture}
-              alt={`${name} picture`}
+              src={
+                activeConversation.isGroup
+                  ? activeConversation.picture
+                  : getConversationPicture(user, activeConversation.users)
+              }
+              alt=""
               className="w-full h-full rounded-full object-cover"
             />
           </button>
-          {/*Conversation name and online status */}
+          {/*Conversation name and online status*/}
           <div className="flex flex-col">
             <h1 className="dark:text-white text-md font-bold">
-              {capitalize(name.split(" ")[0])}
+              {activeConversation.isGroup
+                ? activeConversation.name
+                : capitalize(
+                    getConversationName(user, activeConversation.users).split(
+                      " "
+                    )[0]
+                  )}
             </h1>
             <span className="text-xs dark:text-dark_svg_2">
               {online ? "online" : ""}
             </span>
           </div>
         </div>
-        {/*Right */}
+        {/*Right*/}
         <ul className="flex items-center gap-x-2.5">
           {1 == 1 ? (
             <li onClick={() => callUser()}>

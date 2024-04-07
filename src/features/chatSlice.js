@@ -14,9 +14,9 @@ const initialState = {
   files: [],
 };
 
-// functions
+//functions
 export const getConversations = createAsyncThunk(
-  "conversation/all",
+  "conervsation/all",
   async (token, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(CONVERSATION_ENDPOINT, {
@@ -30,16 +30,14 @@ export const getConversations = createAsyncThunk(
     }
   }
 );
-
 export const openCreateConversation = createAsyncThunk(
-  "conversation/open_create",
+  "conervsation/open_create",
   async (values, { rejectWithValue }) => {
-    const { token, receiver_id } = values;
-
+    const { token, receiver_id, isGroup } = values;
     try {
       const { data } = await axios.post(
         CONVERSATION_ENDPOINT,
-        { receiver_id },
+        { receiver_id, isGroup },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,12 +50,10 @@ export const openCreateConversation = createAsyncThunk(
     }
   }
 );
-
 export const getConversationMessages = createAsyncThunk(
-  "conversation/messages",
+  "conervsation/messages",
   async (values, { rejectWithValue }) => {
     const { token, convo_id } = values;
-
     try {
       const { data } = await axios.get(`${MESSAGE_ENDPOINT}/${convo_id}`, {
         headers: {
@@ -70,15 +66,13 @@ export const getConversationMessages = createAsyncThunk(
     }
   }
 );
-
 export const sendMessage = createAsyncThunk(
   "message/send",
   async (values, { rejectWithValue }) => {
     const { token, message, convo_id, files } = values;
-
     try {
       const { data } = await axios.post(
-        `${MESSAGE_ENDPOINT}`,
+        MESSAGE_ENDPOINT,
         {
           message,
           convo_id,
@@ -96,7 +90,26 @@ export const sendMessage = createAsyncThunk(
     }
   }
 );
-
+export const createGroupConversation = createAsyncThunk(
+  "conervsation/create_group",
+  async (values, { rejectWithValue }) => {
+    const { token, name, users } = values;
+    try {
+      const { data } = await axios.post(
+        `${CONVERSATION_ENDPOINT}/group`,
+        { name, users },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
@@ -130,7 +143,6 @@ export const chatSlice = createSlice({
     removeFileFromFiles: (state, action) => {
       let index = action.payload;
       let files = [...state.files];
-
       let fileToRemove = [files[index]];
       state.files = files.filter((file) => !fileToRemove.includes(file));
     },
@@ -186,6 +198,7 @@ export const chatSlice = createSlice({
         );
         newConvos.unshift(conversation);
         state.conversations = newConvos;
+        state.files = [];
       })
       .addCase(sendMessage.rejected, (state, action) => {
         state.status = "failed";

@@ -9,8 +9,8 @@ export default function Call({
   setCall,
   callAccepted,
   myVideo,
-  userVideo,
   stream,
+  userVideo,
   answerCall,
   show,
   endCall,
@@ -20,33 +20,33 @@ export default function Call({
   const { receivingCall, callEnded, name, picture } = call;
   const [showActions, setShowActions] = useState(false);
   const [toggle, setToggle] = useState(false);
-
   return (
     <>
       <div
         className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[550px] z-10 rounded-2xl overflow-hidden callbg
         ${receivingCall && !callAccepted ? "hidden" : ""}
-    `}
+        `}
         onMouseOver={() => setShowActions(true)}
         onMouseOut={() => setShowActions(false)}
       >
-        {/*Container */}
+        {/*Container*/}
         <div>
           <div>
-            {/*Header */}
+            {/*Header*/}
             <Header />
-            {/*Call area */}
+            {/*Call area*/}
             <CallArea
               name={name}
               totalSecInCall={totalSecInCall}
               setTotalSecInCall={setTotalSecInCall}
+              callAccepted={callAccepted}
             />
-            {/*Call actions */}
+            {/*Call actions*/}
             {showActions ? <CallActions endCall={endCall} /> : null}
           </div>
-          {/*Videos streams*/}
+          {/*Video streams*/}
           <div>
-            {/*user video */}
+            {/*user video*/}
             {callAccepted && !callEnded ? (
               <div>
                 <video
@@ -59,8 +59,7 @@ export default function Call({
                 ></video>
               </div>
             ) : null}
-            {/*my video */}
-
+            {/*my video*/}
             {stream ? (
               <div>
                 <video
@@ -78,7 +77,7 @@ export default function Call({
           </div>
         </div>
       </div>
-      {/*Ringing */}
+      {/*Ringing*/}
       {receivingCall && !callAccepted ? (
         <Ringing
           call={call}

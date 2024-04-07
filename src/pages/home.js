@@ -24,6 +24,7 @@ const callData = {
 
 function Home() {
   const dispatch = useDispatch();
+  const socket = useSocket();
   const { user } = useSelector((state) => state.user);
   const { activeConversation } = useSelector((state) => state.chat);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -41,7 +42,6 @@ function Home() {
 
   //typing
   const [typing, setTyping] = useState(false);
-  const socket = useSocket();
   // join user into the socket io
   useEffect(() => {
     socket.emit("join", user._id);
@@ -181,19 +181,21 @@ function Home() {
         </div>
       </div>
       {/*Call */}
-      <Call
-        call={call}
-        setCall={setCall}
-        callAccepted={callAccepted}
-        myVideo={myVideo}
-        userVideo={userVideo}
-        stream={stream}
-        answerCall={answerCall}
-        show={show}
-        endCall={endCall}
-        totalSecInCall={totalSecInCall}
-        setTotalSecInCall={setTotalSecInCall}
-      />
+      <div className={(show || call.signal) && !call.callEnded ? "" : "hidden"}>
+        <Call
+          call={call}
+          setCall={setCall}
+          callAccepted={callAccepted}
+          myVideo={myVideo}
+          userVideo={userVideo}
+          stream={stream}
+          answerCall={answerCall}
+          show={show}
+          endCall={endCall}
+          totalSecInCall={totalSecInCall}
+          setTotalSecInCall={setTotalSecInCall}
+        />
+      </div>
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function ChatMessages({ typing }) {
               {message.files.length > 0
                 ? message.files.map((file) => (
                     <FileMessage
-                      fileMessage={file}
+                      FileMessage={file}
                       message={message}
                       key={message._id}
                       me={user._id === message.sender._id}
